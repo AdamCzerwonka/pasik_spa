@@ -16,12 +16,15 @@ import { Input } from "@/components/ui/input";
 import { useDebouncedCallback } from "use-debounce";
 import CreateUserDialog from "./CreateUserDialog";
 import { Badge } from "@/components/ui/badge";
+import { useUpdateUser } from "@/data/user/useUpdateUser";
+import { useDialog } from "@/store/dialogStore";
 
 const UsersPage: FC = () => {
   const { users } = useUsers();
   const navigate = useNavigate();
   const [editUser, setEditUser] = useState<User>();
-  const [isEditOpen, setIsEditOpen] = useState(false);
+  const { updateUser } = useUpdateUser();
+  const { openDialog } = useDialog();
 
   const handleDeleteUser = (id: string) => {
     console.log(id);
@@ -31,24 +34,17 @@ const UsersPage: FC = () => {
     console.log(id);
   };
 
-  const handleEdit = (user: User) => {
-    setEditUser(user);
-    setIsEditOpen(true);
-  };
-
   const handleSearch = useDebouncedCallback((value) => {
     console.log(value);
   }, 400);
 
+  const handleEdit = (user: User) => {
+    updateUser(user);
+  };
+
   return (
     <>
-      {editUser && (
-        <EditUserDialog
-          user={editUser}
-          open={isEditOpen}
-          setOpen={setIsEditOpen}
-        />
-      )}
+      {editUser && <EditUserDialog user={editUser} onUpdate={handleEdit} />}
       <h1>Users</h1>
       <div className="flex flex-row gap-2">
         <Input
@@ -58,45 +54,53 @@ const UsersPage: FC = () => {
         />
         <CreateUserDialog />
       </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Login</TableHead>
-            <TableHead>First name</TableHead>
-            <TableHead>Last name</TableHead>
-            <TableHead>Role</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Actions</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {users.map((user) => (
-            <TableRow key={user.id}>
-              <TableCell>{user.login}</TableCell>
-              <TableCell>{user.firstName}</TableCell>
-              <TableCell>{user.lastName}</TableCell>
-              <TableCell>{user.role}</TableCell>
-              <TableCell>
-                <Badge variant={user.active ? "default" : "secondary"}>
-                  {user.active ? "Active" : "Inactive"}
-                </Badge>
-              </TableCell>
-              <TableCell className="flex flex-row gap-x-2">
-                <Button onClick={() => navigate(`/users/${user.id}`)}>
-                  Details
-                </Button>
-                <Button onClick={() => handleEdit(user)} variant="secondary">
-                  Edit
-                </Button>
-                <Button onClick={() => handleChangeUserStatus(user.id)}>
-                  {user.active ? "Disable" : "Activate"}
-                </Button>
-                <ConfirmDialog onClick={() => handleDeleteUser(user.id)} />
-              </TableCell>
+      {users && (
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Login</TableHead>
+              <TableHead>First name</TableHead>
+              <TableHead>Last name</TableHead>
+              <TableHead>Role</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead>Actions</TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableHeader>
+          <TableBody>
+            {users.map((user) => (
+              <TableRow key={user.id}>
+                <TableCell>{user.login}</TableCell>
+                <TableCell>{user.firstName}</TableCell>
+                <TableCell>{user.lastName}</TableCell>
+                <TableCell>{user.role}</TableCell>
+                <TableCell>
+                  <Badge variant={user.active ? "default" : "secondary"}>
+                    {user.active ? "Active" : "Inactive"}
+                  </Badge>
+                </TableCell>
+                <TableCell className="flex flex-row gap-x-2">
+                  <Button onClick={() => navigate(`/users/${user.id}`)}>
+                    Details
+                  </Button>
+                  <Button
+                    onClick={() => {
+                      setEditUser(user);
+                      openDialog("editUser");
+                    }}
+                    variant="secondary"
+                  >
+                    Edit
+                  </Button>
+                  <Button onClick={() => handleChangeUserStatus(user.id)}>
+                    {user.active ? "Disable" : "Activate"}
+                  </Button>
+                  <ConfirmDialog onClick={() => handleDeleteUser(user.id)} />
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      )}
     </>
   );
 };

@@ -22,7 +22,7 @@ export type Rent = {
 
 export const useRents = () => {
   const { data, isLoading } = useQuery<Rent[]>("rents", async () => {
-    const response = await fetch("http://localhost:8080/rent");
+    const response = await fetch("http://localhost:8081/rent");
     return response.json();
   });
 

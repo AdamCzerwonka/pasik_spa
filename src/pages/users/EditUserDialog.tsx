@@ -18,6 +18,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { User } from "@/data/user/useUsers";
+import { useDialog } from "@/store/dialogStore";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FC } from "react";
 import { useForm } from "react-hook-form";
@@ -25,8 +26,7 @@ import { z } from "zod";
 
 type EditUserDialogProps = {
   user: User;
-  open: boolean;
-  setOpen: (open: boolean) => void;
+  onUpdate: (user: User) => void;
 };
 
 const updateUserSchema = z.object({
@@ -37,7 +37,8 @@ const updateUserSchema = z.object({
 
 type UpdateUserSchema = z.infer<typeof updateUserSchema>;
 
-const EditUserDialog: FC<EditUserDialogProps> = ({ user, open, setOpen }) => {
+const EditUserDialog: FC<EditUserDialogProps> = ({ user, onUpdate }) => {
+  const { isOpen, closeDialog } = useDialog();
   const methods = useForm<UpdateUserSchema>({
     resolver: zodResolver(updateUserSchema),
     values: {
@@ -46,13 +47,19 @@ const EditUserDialog: FC<EditUserDialogProps> = ({ user, open, setOpen }) => {
   });
 
   const handleSubmit = methods.handleSubmit((values) => {
-    console.log(values);
+    onUpdate({
+      id: user.id,
+      role: user.role,
+      login: user.login,
+      ...values,
+    });
+    closeDialog();
   });
   return (
     <Dialog
-      open={open}
-      onOpenChange={(open) => {
-        setOpen(open);
+      open={isOpen("editUser")}
+      onOpenChange={() => {
+        closeDialog();
       }}
     >
       <DialogContent>

@@ -11,6 +11,7 @@ import UsersPage from "./pages/users";
 import MainLayout from "./pages/layout.tsx";
 import UserDetailsPage from "./pages/userDetails/index.tsx";
 import { QueryClient, QueryClientProvider } from "react-query";
+import RentsPage from "./pages/rents/index.tsx";
 
 const routes = [
   {
@@ -20,6 +21,7 @@ const routes = [
       { path: "/", Component: App },
       { path: "/users", Component: UsersPage },
       { path: "/users/:id", Component: UserDetailsPage },
+      { path: "/rents", Component: RentsPage },
     ],
   },
 ] satisfies RouteObject[];

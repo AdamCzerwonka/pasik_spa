@@ -18,7 +18,7 @@ const RentTable: FC<RentTableProps> = ({ rents }) => {
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHeader>#</TableHeader>
+          <TableHead>#</TableHead>
           <TableHead>Client</TableHead>
           <TableHead>Real estate</TableHead>
           <TableHead>Start date</TableHead>

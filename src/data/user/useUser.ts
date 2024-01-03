@@ -1,10 +1,13 @@
 import { useParams } from "react-router-dom";
-import { users } from "./useUsers";
+import { useQuery } from "react-query";
 
 export const useUser = () => {
   const { id } = useParams();
-  if (!id) {
-    return { user: undefined };
-  }
-  return { user: users.find((x) => x.id === id) };
+
+  const { data, isLoading } = useQuery(["users", id], async () => {
+    const response = await fetch(`http://localhost:8081/user/${id}`);
+    return response.json();
+  });
+
+  return { user: data, isLoading };
 };
