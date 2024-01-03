@@ -1,4 +1,3 @@
-import ConfirmDialog from "@/components/ConfirmDialog";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -18,20 +17,18 @@ import CreateUserDialog from "./CreateUserDialog";
 import { Badge } from "@/components/ui/badge";
 import { useUpdateUser } from "@/data/user/useUpdateUser";
 import { useDialog } from "@/store/dialogStore";
+import { useChangeUserStatus } from "@/data/user/useChangesUserStatus";
 
 const UsersPage: FC = () => {
   const { users } = useUsers();
   const navigate = useNavigate();
   const [editUser, setEditUser] = useState<User>();
   const { updateUser } = useUpdateUser();
+  const { changeUserStatus } = useChangeUserStatus();
   const { openDialog } = useDialog();
 
-  const handleDeleteUser = (id: string) => {
-    console.log(id);
-  };
-
-  const handleChangeUserStatus = (id: string) => {
-    console.log(id);
+  const handleChangeUserStatus = (user: User) => {
+    changeUserStatus(user);
   };
 
   const handleSearch = useDebouncedCallback((value) => {
@@ -91,10 +88,9 @@ const UsersPage: FC = () => {
                   >
                     Edit
                   </Button>
-                  <Button onClick={() => handleChangeUserStatus(user.id)}>
+                  <Button onClick={() => handleChangeUserStatus(user)}>
                     {user.active ? "Disable" : "Activate"}
                   </Button>
-                  <ConfirmDialog onClick={() => handleDeleteUser(user.id)} />
                 </TableCell>
               </TableRow>
             ))}
