@@ -1,30 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import App from "./App.tsx";
 import "./index.css";
-import {
-  RouteObject,
-  RouterProvider,
-  createBrowserRouter,
-} from "react-router-dom";
-import UsersPage from "./pages/users";
-import MainLayout from "./pages/layout.tsx";
-import UserDetailsPage from "./pages/userDetails/index.tsx";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "react-query";
-import RentsPage from "./pages/rents/index.tsx";
-
-const routes = [
-  {
-    path: "/",
-    Component: MainLayout,
-    children: [
-      { path: "/", Component: App },
-      { path: "/users", Component: UsersPage },
-      { path: "/users/:id", Component: UserDetailsPage },
-      { path: "/rents", Component: RentsPage },
-    ],
-  },
-] satisfies RouteObject[];
+import { routes } from "./routes.ts";
 
 const router = createBrowserRouter(routes);
 const queryClient = new QueryClient();
