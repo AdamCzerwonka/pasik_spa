@@ -20,7 +20,7 @@ const ConfirmDialog: FC<ConfirmDialogProps> = ({ onClick }) => {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button variant="destructive">Delete</Button>
+        <Button>End rent</Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>

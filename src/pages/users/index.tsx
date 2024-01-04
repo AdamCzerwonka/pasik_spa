@@ -7,7 +7,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { User, useUsers } from "@/data/user/useUsers";
+import { User, useUsers, useUsersFilter } from "@/data/user/useUsers";
 import { FC, useState } from "react";
 import EditUserDialog from "./EditUserDialog";
 import { useNavigate } from "react-router-dom";
@@ -26,13 +26,16 @@ const UsersPage: FC = () => {
   const { updateUser } = useUpdateUser();
   const { changeUserStatus } = useChangeUserStatus();
   const { openDialog } = useDialog();
+  const { setFilter, filter } = useUsersFilter();
 
   const handleChangeUserStatus = (user: User) => {
     changeUserStatus(user);
   };
 
   const handleSearch = useDebouncedCallback((value) => {
-    console.log(value);
+    if (filter !== value) {
+      setFilter(value);
+    }
   }, 400);
 
   const handleEdit = (user: User) => {

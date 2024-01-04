@@ -1,31 +1,28 @@
 import { useMutation, useQueryClient } from "react-query";
-import { Roles } from "@/types/Roles";
-import { APIError } from "../rent/useEndRent";
+import { APIError } from "./useEndRent";
 import { useToast } from "@/components/ui/use-toast";
+import moment from "moment";
 
-type CreateUser = {
-  firstName: string;
-  lastName: string;
-  login: string;
-  role: Roles;
+type CreateRent = {
+  clientId: string;
+  realEstateId: string;
+  startDate: Date;
 };
 
-export const useCreateUser = () => {
+export const useCreateRent = () => {
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const { mutate, isLoading } = useMutation(
-    async (user: CreateUser) => {
-      const endpoint = user.role.toLowerCase();
-      const response = await fetch(`http://localhost:8081/${endpoint}`, {
+    async (rent: CreateRent) => {
+      const response = await fetch("http://localhost:8081/rent", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          firstName: user.firstName,
-          lastName: user.lastName,
-          login: user.login,
-          active: false,
+          ...rent,
+          //2024-01-03
+          startDate: moment(rent.startDate).format("YYYY-MM-DD"),
         }),
       });
 
@@ -38,9 +35,9 @@ export const useCreateUser = () => {
     },
     {
       onSuccess: () => {
-        queryClient.invalidateQueries("users");
+        queryClient.invalidateQueries("rents");
       },
-      onError: (error: Error) => {
+      onError(error: Error) {
         toast({
           title: "There was an error",
           description: error.message,
@@ -50,5 +47,5 @@ export const useCreateUser = () => {
     }
   );
 
-  return { createUser: mutate, isLoading };
+  return { createRent: mutate, isLoading };
 };

@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-type Dialogs = "createUser" | "editUser";
+type Dialogs = "createUser" | "editUser" | "createRent";
 
 type DialogStore = {
   open?: Dialogs;
