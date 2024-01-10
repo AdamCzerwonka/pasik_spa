@@ -140,7 +140,7 @@ const CreateUserDialog: FC = () => {
                   </FormItem>
                 )}
               />
-              <DialogFooter>
+              <DialogFooter className="gap-2">
                 <Button
                   type="button"
                   onClick={() => {

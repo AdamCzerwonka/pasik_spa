@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from "react-query";
 import { APIError } from "./useEndRent";
 import { useToast } from "@/components/ui/use-toast";
 import moment from "moment";
+import { API_URL } from "../api";
 
 type CreateRent = {
   clientId: string;
@@ -14,7 +15,7 @@ export const useCreateRent = () => {
   const queryClient = useQueryClient();
   const { mutate, isLoading } = useMutation(
     async (rent: CreateRent) => {
-      const response = await fetch("http://localhost:8081/rent", {
+      const response = await fetch(`${API_URL}/rent`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

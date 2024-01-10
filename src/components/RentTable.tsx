@@ -1,12 +1,4 @@
 import { FC } from "react";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "./ui/table";
 import { Rent } from "@/data/rent/useRents";
 import { useEndRent } from "@/data/rent/useEndRent";
 import ConfirmDialog from "./ConfirmDialog";
@@ -23,40 +15,29 @@ const RentTable: FC<RentTableProps> = ({ rents }) => {
   };
 
   return (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead>#</TableHead>
-          <TableHead>Client</TableHead>
-          <TableHead>Real estate</TableHead>
-          <TableHead>Start date</TableHead>
-          <TableHead>End date</TableHead>
-          <TableHead>Action</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {rents.map((rent, idx) => (
-          <TableRow key={rent.id}>
-            <TableCell>{idx + 1}</TableCell>
-            <TableCell>
-              {rent.client.firstName + " " + rent.client.lastName}
-            </TableCell>
-            <TableCell>{rent.realEstate.name}</TableCell>
-            <TableCell>
-              {new Date(rent.startDate).toLocaleDateString()}
-            </TableCell>
-            <TableCell>
-              {rent.endDate && new Date(rent.endDate).toLocaleDateString()}
-            </TableCell>
-            <TableCell>
-              {!rent.endDate && (
-                <ConfirmDialog onClick={() => handleEndRent(rent.id)} />
-              )}
-            </TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
+    <div className="flex flex-col gap-2">
+      {rents.map((rent) => (
+        <div
+          key={rent.id}
+          className="flex flex-col gap-2 border rounded-md p-2"
+        >
+          <div>
+            Client: {rent.client.firstName + " " + rent.client.lastName}
+          </div>
+          <div>Real estate: {rent.realEstate.name}</div>
+          <div>Start date: {new Date(rent.startDate).toLocaleDateString()}</div>
+          <div>
+            End date:
+            {rent.endDate && new Date(rent.endDate).toLocaleDateString()}
+          </div>
+          <div>
+            {!rent.endDate && (
+              <ConfirmDialog onClick={() => handleEndRent(rent.id)} />
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
   );
 };
 

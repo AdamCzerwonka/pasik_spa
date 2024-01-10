@@ -1,10 +1,8 @@
-import { lazy } from "react";
 import { RouteObject } from "react-router-dom";
 import MainLayout from "./pages/layout";
-
-const UsersPage = lazy(() => import("./pages/users"));
-const UserDetailsPage = lazy(() => import("./pages/userDetails"));
-const RentsPage = lazy(() => import("./pages/rents"));
+import RentsPage from "./pages/rents";
+import UserDetailsPage from "./pages/userDetails";
+import UsersPage from "./pages/users";
 
 export const routes = [
   {

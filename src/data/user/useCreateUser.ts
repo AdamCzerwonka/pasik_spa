@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from "react-query";
 import { Roles } from "@/types/Roles";
 import { APIError } from "../rent/useEndRent";
 import { useToast } from "@/components/ui/use-toast";
+import { API_URL } from "../api";
 
 type CreateUser = {
   firstName: string;
@@ -16,7 +17,7 @@ export const useCreateUser = () => {
   const { mutate, isLoading } = useMutation(
     async (user: CreateUser) => {
       const endpoint = user.role.toLowerCase();
-      const response = await fetch(`http://localhost:8081/${endpoint}`, {
+      const response = await fetch(`${API_URL}/${endpoint}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

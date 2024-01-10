@@ -1,4 +1,5 @@
 import { useQuery } from "react-query";
+import { API_URL } from "../api";
 
 type RealEstate = {
   id: string;
@@ -10,7 +11,7 @@ type RealEstate = {
 
 export const useRealEstates = () => {
   const { data, isLoading } = useQuery("realEstates", async () => {
-    const response = await fetch("http://localhost:8081/realestate");
+    const response = await fetch(`${API_URL}/realestate`);
     return response.json();
   });
 

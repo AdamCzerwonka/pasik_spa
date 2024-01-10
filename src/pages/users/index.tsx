@@ -1,12 +1,4 @@
 import { Button } from "@/components/ui/button";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import { User, useUsers, useUsersFilter } from "@/data/user/useUsers";
 import { FC, useState } from "react";
 import EditUserDialog from "./EditUserDialog";
@@ -54,52 +46,43 @@ const UsersPage: FC = () => {
         />
         <CreateUserDialog />
       </div>
-      {users && (
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Login</TableHead>
-              <TableHead>First name</TableHead>
-              <TableHead>Last name</TableHead>
-              <TableHead>Role</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {users.map((user) => (
-              <TableRow key={user.id}>
-                <TableCell>{user.login}</TableCell>
-                <TableCell>{user.firstName}</TableCell>
-                <TableCell>{user.lastName}</TableCell>
-                <TableCell>{user.role}</TableCell>
-                <TableCell>
-                  <Badge variant={user.active ? "default" : "secondary"}>
-                    {user.active ? "Active" : "Inactive"}
-                  </Badge>
-                </TableCell>
-                <TableCell className="flex flex-row gap-x-2">
-                  <Button onClick={() => navigate(`/users/${user.id}`)}>
-                    Details
-                  </Button>
-                  <Button
-                    onClick={() => {
-                      setEditUser(user);
-                      openDialog("editUser");
-                    }}
-                    variant="secondary"
-                  >
-                    Edit
-                  </Button>
-                  <Button onClick={() => handleChangeUserStatus(user)}>
-                    {user.active ? "Disable" : "Activate"}
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      )}
+      <div className="flex flex-col gap-2">
+        {users &&
+          users.map((user) => (
+            <div
+              key={user.id}
+              className="flex flex-col gap-2 border rounded-md p-2"
+            >
+              <div>Login: {user.login}</div>
+              <div>Firstname: {user.firstName}</div>
+              <div>Lastname: {user.lastName}</div>
+              <div>Role: {user.role}</div>
+              <div>
+                Status:{" "}
+                <Badge variant={user.active ? "default" : "secondary"}>
+                  {user.active ? "Active" : "Inactive"}
+                </Badge>
+              </div>
+              <div className="flex flex-row gap-x-2 justify-center">
+                <Button onClick={() => navigate(`/users/${user.id}`)}>
+                  Details
+                </Button>
+                <Button
+                  onClick={() => {
+                    setEditUser(user);
+                    openDialog("editUser");
+                  }}
+                  variant="secondary"
+                >
+                  Edit
+                </Button>
+                <Button onClick={() => handleChangeUserStatus(user)}>
+                  {user.active ? "Disable" : "Activate"}
+                </Button>
+              </div>
+            </div>
+          ))}
+      </div>
     </>
   );
 };
