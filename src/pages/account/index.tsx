@@ -17,6 +17,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { FC } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import CreateRentDialog from "./CreateRentDialog";
 
 const changePasswordSchema = z.object({
   oldPassword: z.string().min(1),
@@ -42,6 +43,7 @@ const AccountPage: FC = () => {
   });
   return (
     <div>
+      <CreateRentDialog />
       <Form {...form}>
         <form onSubmit={handleSubmit}>
           <FormField
