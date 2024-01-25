@@ -1,6 +1,7 @@
 import { Roles } from "@/types/Roles";
 import { useQuery } from "react-query";
 import { create } from "zustand";
+import { api } from "../api";
 
 export type User = {
   id: string;
@@ -9,6 +10,7 @@ export type User = {
   lastName: string;
   active: boolean;
   role: Roles;
+  eTag?: string;
 };
 
 type UsersFilterStore = {
@@ -25,10 +27,8 @@ export const useUsers = () => {
   const { filter } = useUsersFilter();
   const { data, isLoading } = useQuery(["users", filter], async () => {
     const filterQuery = `?filter=${filter}`;
-    const response = await fetch(
-      `http://localhost:8081/user${filter ? filterQuery : ""}`
-    );
-    return response.json();
+    const result = await api.get(`/user${filter ? filterQuery : ""}`);
+    return result.data;
   });
   return { users: data as User[], isLoading };
 };

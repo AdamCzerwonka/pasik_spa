@@ -1,26 +1,33 @@
 import { useMutation, useQueryClient } from "react-query";
 import { User } from "./useUsers";
+import { api } from "../api";
+
+type UpdateUser = { etag: string } & User;
 
 export const useUpdateUser = () => {
   const queryClient = useQueryClient();
   const { mutate, isLoading } = useMutation(
-    async (user: User) => {
+    async (user: UpdateUser) => {
       const endpoint = user.role.toLowerCase();
-      const response = await fetch(`http://localhost:8081/${endpoint}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
+      console.log(user);
+
+      const response = await api.put(
+        `/${endpoint}`,
+        {
           id: user.id,
           login: user.login,
           firstName: user.firstName,
           lastName: user.lastName,
           active: user.active,
-        }),
-      });
+        },
+        {
+          headers: {
+            "If-Match": user.etag,
+          },
+        }
+      );
 
-      return response.json();
+      return response.data;
     },
     {
       onSuccess: () => {

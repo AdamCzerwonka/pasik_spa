@@ -35,6 +35,7 @@ const createUserSchema = z.object({
   firstName: z.string().min(1),
   lastName: z.string().min(1),
   login: z.string().min(1),
+  password: z.string().min(1),
   role: z.enum(getValues(Roles)),
 });
 
@@ -111,6 +112,19 @@ const CreateUserDialog: FC = () => {
                     <FormLabel>Login</FormLabel>
                     <FormControl>
                       <Input placeholder="login" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Password</FormLabel>
+                    <FormControl>
+                      <Input type="password" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

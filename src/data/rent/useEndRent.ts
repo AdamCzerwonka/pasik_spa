@@ -1,5 +1,6 @@
 import { useToast } from "@/components/ui/use-toast";
 import { useMutation, useQueryClient } from "react-query";
+import { api } from "../api";
 
 export type APIError = {
   status: number;
@@ -11,11 +12,10 @@ export const useEndRent = () => {
   const { toast } = useToast();
   const { mutate, isLoading } = useMutation(
     async (id: string) => {
-      const response = await fetch(`http://localhost:8081/rent/${id}/end`, {
-        method: "POST",
-      });
+      const response = await api.post(`/rent/${id}/end`);
+
       if (response.status == 400) {
-        const error = (await response.json()) as APIError;
+        const error = response.data as APIError;
         throw new Error(Object.values(error.errors).join(" "));
       }
     },

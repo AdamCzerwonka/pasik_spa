@@ -17,6 +17,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
+import { useUpdateUser } from "@/data/user/useUpdateUser";
+import { useUser } from "@/data/user/useUser";
 import { User } from "@/data/user/useUsers";
 import { useDialog } from "@/store/dialogStore";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -26,7 +28,6 @@ import { z } from "zod";
 
 type EditUserDialogProps = {
   user: User;
-  onUpdate: (user: User) => void;
 };
 
 const updateUserSchema = z.object({
@@ -37,21 +38,24 @@ const updateUserSchema = z.object({
 
 type UpdateUserSchema = z.infer<typeof updateUserSchema>;
 
-const EditUserDialog: FC<EditUserDialogProps> = ({ user, onUpdate }) => {
+const EditUserDialog: FC<EditUserDialogProps> = ({ user: { id } }) => {
   const { isOpen, closeDialog } = useDialog();
+  const { user } = useUser(id);
+  const { updateUser } = useUpdateUser();
   const methods = useForm<UpdateUserSchema>({
     resolver: zodResolver(updateUserSchema),
     values: {
-      ...user,
+      ...user!,
     },
   });
 
   const handleSubmit = methods.handleSubmit((values) => {
-    onUpdate({
-      id: user.id,
-      role: user.role,
-      login: user.login,
+    updateUser({
+      id: user!.id,
+      role: user!.role,
+      login: user!.login,
       ...values,
+      etag: user!.eTag ?? "",
     });
     closeDialog();
   });
@@ -64,7 +68,7 @@ const EditUserDialog: FC<EditUserDialogProps> = ({ user, onUpdate }) => {
     >
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Edit {user.login}</DialogTitle>
+          <DialogTitle>Edit {user?.login}</DialogTitle>
         </DialogHeader>
         <Form {...methods}>
           <form onSubmit={handleSubmit}>

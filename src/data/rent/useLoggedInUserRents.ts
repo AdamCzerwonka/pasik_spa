@@ -1,10 +1,13 @@
 import { useQuery } from "react-query";
 import { Rent } from "./useRents";
-import { useParams } from "react-router-dom";
 import { api } from "../api";
+import { useAuthStore } from "@/store/authStore";
+import { jwtDecode } from "jwt-decode";
 
-export const useUserRents = () => {
-  const { id } = useParams();
+export const useLoggedInUserRents = () => {
+  const { token } = useAuthStore();
+  const decoded = jwtDecode(token!);
+  const id = "id" in decoded ? (decoded.id as string) : "";
   const { data, isLoading } = useQuery<Rent[]>(["rents", id], async () => {
     const response = await api.get(`/client/${id}/rents`);
     return response.data;

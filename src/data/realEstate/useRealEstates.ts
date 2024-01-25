@@ -1,4 +1,5 @@
 import { useQuery } from "react-query";
+import { api } from "../api";
 
 type RealEstate = {
   id: string;
@@ -10,8 +11,8 @@ type RealEstate = {
 
 export const useRealEstates = () => {
   const { data, isLoading } = useQuery("realEstates", async () => {
-    const response = await fetch("http://localhost:8081/realestate");
-    return response.json();
+    const response = await api.get("/realestate");
+    return response.data;
   });
 
   return { realEstates: data as RealEstate[], isLoading };

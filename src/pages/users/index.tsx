@@ -15,7 +15,6 @@ import { Input } from "@/components/ui/input";
 import { useDebouncedCallback } from "use-debounce";
 import CreateUserDialog from "./CreateUserDialog";
 import { Badge } from "@/components/ui/badge";
-import { useUpdateUser } from "@/data/user/useUpdateUser";
 import { useDialog } from "@/store/dialogStore";
 import { useChangeUserStatus } from "@/data/user/useChangesUserStatus";
 
@@ -23,7 +22,6 @@ const UsersPage: FC = () => {
   const { users } = useUsers();
   const navigate = useNavigate();
   const [editUser, setEditUser] = useState<User>();
-  const { updateUser } = useUpdateUser();
   const { changeUserStatus } = useChangeUserStatus();
   const { openDialog } = useDialog();
   const { setFilter, filter } = useUsersFilter();
@@ -38,13 +36,9 @@ const UsersPage: FC = () => {
     }
   }, 400);
 
-  const handleEdit = (user: User) => {
-    updateUser(user);
-  };
-
   return (
     <>
-      {editUser && <EditUserDialog user={editUser} onUpdate={handleEdit} />}
+      {editUser && <EditUserDialog user={editUser} />}
       <h1>Users</h1>
       <div className="flex flex-row gap-2">
         <Input

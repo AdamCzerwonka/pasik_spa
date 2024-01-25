@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from "react-query";
 import { APIError } from "./useEndRent";
 import { useToast } from "@/components/ui/use-toast";
 import moment from "moment";
+import { api } from "../api";
 
 type CreateRent = {
   clientId: string;
@@ -14,24 +15,18 @@ export const useCreateRent = () => {
   const queryClient = useQueryClient();
   const { mutate, isLoading } = useMutation(
     async (rent: CreateRent) => {
-      const response = await fetch("http://localhost:8081/rent", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          ...rent,
-          //2024-01-03
-          startDate: moment(rent.startDate).format("YYYY-MM-DD"),
-        }),
+      const response = await api.post("/rent", {
+        ...rent,
+        //2024-01-03
+        startDate: moment(rent.startDate).format("YYYY-MM-DD"),
       });
 
-      if (!response.ok) {
-        const error = (await response.json()) as APIError;
+      if (response.status === 200) {
+        const error = response.data as APIError;
         throw new Error(Object.values(error.errors).join(" "));
       }
 
-      return response.json();
+      return response.data;
     },
     {
       onSuccess: () => {
