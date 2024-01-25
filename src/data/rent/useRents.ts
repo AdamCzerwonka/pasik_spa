@@ -2,21 +2,10 @@ import { useQuery } from "react-query";
 import { api } from "../api";
 
 export type Rent = {
+  realEstateName: string;
+  clientLastName: string;
+  clientFirstName: string;
   id: string;
-  client: {
-    id: string;
-    firstName: string;
-    lastName: string;
-    login: string;
-    active: boolean;
-  };
-  realEstate: {
-    id: string;
-    name: string;
-    address: string;
-    area: number;
-    price: number;
-  };
   startDate: string;
   endDate: string;
 };

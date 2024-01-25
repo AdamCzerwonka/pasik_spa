@@ -39,9 +39,9 @@ const RentTable: FC<RentTableProps> = ({ rents }) => {
           <TableRow key={rent.id}>
             <TableCell>{idx + 1}</TableCell>
             <TableCell>
-              {rent.client.firstName + " " + rent.client.lastName}
+              {rent.clientFirstName + " " + rent.clientLastName}
             </TableCell>
-            <TableCell>{rent.realEstate.name}</TableCell>
+            <TableCell>{rent.realEstateName}</TableCell>
             <TableCell>
               {new Date(rent.startDate).toLocaleDateString()}
             </TableCell>
